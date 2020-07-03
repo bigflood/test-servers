@@ -1,0 +1,24 @@
+# https://hub.docker.com/_/elasticsearch
+# https://docs.docker.com/compose/
+version: '2.0'
+services:
+  elasticsearch:
+    image: elasticsearch:7.8.0
+    volumes:
+    - ./esdata:/usr/share/elasticsearch/data
+    ports:
+    - "9200:9200"
+    - "9300:9300"
+    environment:
+    - discovery.type=single-node
+    - test-servers
+  kibana:
+    image: kibana:7.8.0
+    ports:
+    - "5601:5601"
+    volumes:
+    - ./kibanadata:/usr/share/kibana/data
+networks:
+  default:
+    external:
+      name: test-servers
