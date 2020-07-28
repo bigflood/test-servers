@@ -1,0 +1,26 @@
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "ramsey/macos-catalina"
+    config.vm.box_version = "1.0.0"
+
+    config.vm.synced_folder "data/", "/vagrant", create: true
+
+    config.vm.provider "virtualbox" do |vb|
+        #vb.name = "XXX"
+        
+        # https://www.virtualbox.org/manual/ch08.html
+        #vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+        #vb.customize ["setextradata", :id, "GUI/MaxGuestResolution", "any"]
+        #vb.customize ["setextradata", :id, "custom3k", "2880x1620x32"]
+        #vb.customize ["controlvm", :id, "setvideomodehint", "2880", "1620", "32"]
+
+        # Display the VirtualBox GUI when booting the machine
+        vb.gui = true
+        # Customize the amount of memory on the VM:
+        vb.memory = 8192
+    end
+
+    config.vm.provision "shell", privileged:true, inline: <<-SHELL
+    SHELL
+
+end
