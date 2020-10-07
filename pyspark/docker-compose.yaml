@@ -1,35 +1,38 @@
 # https://hub.docker.com/r/bitnami/spark/
-version: '2'
+version: '3'
+x-spark_common: &spark_common
+  image: custom-spark
+  build:
+    context: .
+    dockerfile: Dockerfile.spark
+  volumes:
+    - './data:/data'
+    - './work:/work'
+  environment:
+    - SPARK_RPC_AUTHENTICATION_ENABLED=no
+    - SPARK_RPC_ENCRYPTION_ENABLED=no
+    - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+    - SPARK_SSL_ENABLED=no
+    - PYTHONIOENCODING=utf8
+x-worker_common: &worker_common
+  <<: *spark_common
+  environment:
+    - SPARK_MODE=worker
+    - SPARK_MASTER_URL=spark://spark:7077
+    - SPARK_WORKER_MEMORY=1G
+    - SPARK_WORKER_CORES=1
 services:
   spark:
-    image: docker.io/bitnami/spark:3-debian-10
+    <<: *spark_common
     environment:
       - SPARK_MODE=master
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
     ports:
       - '8080:8080'
   spark-worker-1:
-    image: docker.io/bitnami/spark:3-debian-10
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark:7077
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_WORKER_CORES=1
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
+    <<: *worker_common
   spark-worker-2:
-    image: docker.io/bitnami/spark:3-debian-10
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark:7077
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_WORKER_CORES=1
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
+    <<: *worker_common
+  spark-worker-3:
+    <<: *worker_common
+  spark-worker-4:
+    <<: *worker_common
