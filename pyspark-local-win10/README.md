@@ -19,3 +19,9 @@ pyspark
 ```
 spark-shell
 ```
+
+
+## ref
+
+- https://phoenixnap.com/kb/install-spark-on-windows-10
+- https://medium.com/swlh/pyspark-on-macos-installation-and-use-31f84ca61400
